@@ -1,9 +1,8 @@
 <template>
   <div>
-    <img src="./assets/Logo TT.svg" alt="Logo Task Tracker">
     <Navbar />
+    <router-view></router-view>
   </div>
-  <!-- <router-view></router-view> -->
 </template>
 
 <script>
