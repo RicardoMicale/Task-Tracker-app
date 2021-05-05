@@ -11,14 +11,18 @@
                 <li>
                     <router-link class="link" to="/tareas">Tareas</router-link>
                 </li>
+                <li>
+                    <button class="btn-login">Iniciar Sesion</button>
+                </li>
             </ul>
         </nav>
     </header>
 </template>
 
 <script>
-export default {
 
+export default {
+    name: 'Navbar'
 }
 </script>
 
@@ -48,7 +52,7 @@ img {
 
 ul {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: center;
     width: 20vw;
     flex-wrap: wrap;
@@ -95,6 +99,16 @@ ul {
             width: 100%;
         }
     }
+
+    .btn-login {
+        padding: .5rem 1rem;
+        outline: none;
+        border: none;
+        border-radius: 500000px;
+        color: $bg;
+        background-image: linear-gradient(to right, $primary, $accent);
+        cursor: pointer;
+    }
 }
 
 
@@ -105,7 +119,7 @@ ul {
     }
 
     ul {
-        width: 70vw;
+        width: 80vw;
     }
 }
 

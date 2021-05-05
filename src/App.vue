@@ -1,17 +1,20 @@
 <template>
   <div>
     <Navbar />
+    <Login class="login"/>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-import Navbar from './components/Navbar'
+import Navbar from './components/Navbar';
+import Login from './components/Login';
 
 export default {
   name: 'App',
   components: {
-    Navbar
+    Navbar,
+    Login
   }
 }
 </script>
@@ -37,6 +40,12 @@ $font: 'Poppins', Helvetica;
   padding: 0;
   box-sizing: border-box;
   font-family: $font;
+}
+
+.login {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 </style>
