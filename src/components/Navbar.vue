@@ -11,8 +11,11 @@
                 <li>
                     <router-link class="link" to="/tareas">Tareas</router-link>
                 </li>
-                <li>
+                <li v-if="loggeado">
                     <button @click="$emit('open')" class="btn-login">Iniciar Sesion</button>
+                </li>
+                <li v-else>
+                    <button class="btn-login" @click="logout()">Cerrar Sesion</button>
                 </li>
             </ul>
         </nav>
@@ -20,9 +23,36 @@
 </template>
 
 <script>
+import firebase from 'firebase';
 
 export default {
-    name: 'Navbar'
+    name: 'Navbar',
+    data() {
+        return {
+            loggeado: Boolean
+        }
+    },
+    methods: {
+        isUserSignedIn() {
+            firebase.auth().onAuthStateChanged(user => {
+                if(user) {
+                    this.loggeado = false
+                } else {
+                    this.loggeado = true
+                }
+            })
+        },
+        logout() {
+            firebase.auth().signOut().then(() => {
+                this.$router.push('/')
+            });
+
+            this.loggeado = false
+        }
+    },
+    mounted() {
+        this.isUserSignedIn();
+    }
 }
 </script>
 
