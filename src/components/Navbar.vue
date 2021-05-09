@@ -12,7 +12,7 @@
                     <router-link class="link" to="/tareas">Tareas</router-link>
                 </li>
                 <li>
-                    <button class="btn-login">Iniciar Sesion</button>
+                    <button @click="$emit('open')" class="btn-login">Iniciar Sesion</button>
                 </li>
             </ul>
         </nav>

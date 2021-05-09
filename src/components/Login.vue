@@ -1,7 +1,7 @@
 <template>
   <div class="modal-bg">
       <div class="modal">
-          <i class="fas fa-times close"></i>
+          <div class="cerrar" @click="$emit('close')"><i class="fas fa-times close"></i></div>
           <button class="log-btn" @click="loginGoogle()"><img src="../assets/Google.svg" alt="Google Logo">Iniciar sesion con google</button>
       </div>
   </div>

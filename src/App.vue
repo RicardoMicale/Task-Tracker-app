@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Navbar />
-    <Login class="login"/>
+    <Navbar @open="abrirLogin = true" />
+    <Login @close="abrirLogin = false" v-if="abrirLogin" class="login"/>
     <router-view></router-view>
   </div>
 </template>
@@ -15,6 +15,14 @@ export default {
   components: {
     Navbar,
     Login
+  },
+  data() {
+    return {
+      abrirLogin: false
+    }
+  },
+  methods: {
+
   }
 }
 </script>
