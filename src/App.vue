@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main">
     <Navbar @open="abrirLogin = true" />
     <Login @close="abrirLogin = false" v-if="abrirLogin" class="login"/>
     <router-view></router-view>
@@ -48,6 +48,11 @@ $font: 'Poppins', Helvetica;
   padding: 0;
   box-sizing: border-box;
   font-family: $font;
+}
+
+.main {
+  background-color: $bg;
+  height: 100vh;
 }
 
 .login {
