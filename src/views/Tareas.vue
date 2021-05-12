@@ -20,16 +20,16 @@
           <input type="submit" value="Guardar">
         </form>
       </div>
-      <div class="tareas" v-for="tarea in cUser" :key="tarea.id">
-        <div class="tarea listo">
+      <div class="tareas">
+        <div class="tarea" :class="tarea.completada ? 'listo' : ''"  v-for="tarea in cUser" :key="tarea.id">
           <div class="info">
-            <h5>{{ tarea.descrip }}</h5>
+            <h5>{{ tarea.descripcion }}</h5>
             <p>{{ tarea.fecha }}</p>
           </div>
           <div class="actions">
             <i class="fas fa-thumbs-down" v-if="tarea.completada"></i>
             <i class="fas fa-thumbs-up" v-else></i>
-            <i class="fas fa-times"></i>
+            <i class="fas fa-times" @click="eliminarTarea(tarea.id)"></i>
           </div>
         </div>
       </div>
@@ -56,6 +56,7 @@ export default {
         
         if(!user) {
           alert('No has iniciado sesion, por favor ingresa a tu cuenta para poder agregar tareas');
+          this.$router.push('/');
           return
         }
 
@@ -64,36 +65,53 @@ export default {
         }).catch(err => {console.log(err)});
 
       },
-      agregarTarea() {
+      async agregarTarea() {
         const tarea = this.constructorTareas(this.fecha, this.descrip);
 
         const user = firebase.auth().currentUser;
         let usuarioActual;
 
-        fb.getUser(user.uid).then(response => {
+        await fb.getUser(user.uid).then(response => {
           usuarioActual = response.data();
+
+          usuarioActual.tareas.push(tarea);
         }).catch(err => {console.log(err)});
 
-        usuarioActual.tareas.push(tarea);
+        fb.updateUser(user.uid, usuarioActual);
+
 
       },
       constructorTareas(fecha, descrip) {
-        let id;
-
-        const user = firebase.auth().currentUser.uid
-        fb.getUser(user).then(response => {
-          const usuario = response.data();
-          id = usuario.tareas.length;
-        })
-
+        let id = this.cUser.length;
+        
         const tarea = {
           fecha: fecha,
           descripcion: descrip,
           completada: false,
-          id: id + 1
+          id: id
         }
 
         return tarea
+      },
+      eliminarTarea(id) {
+
+        const user = firebase.auth().currentUser;
+        let usuario;
+
+        fb.getUser(user.uid).then(response => {
+
+          const tareasUser = response.data().tareas;
+          usuario = response.data()
+
+          tareasUser.splice(id, 1);
+
+          usuario.tareas = tareasUser;
+        })
+
+        console.log(usuario);
+
+        fb.updateUser(user.uid, usuario);
+
       }
     },
     mounted() {
@@ -149,13 +167,14 @@ $font-second: #424458;
 
 .informacion {
   align-items: flex-start;
+  width: 100%;
 }
 
 .tareas {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: flex-end;
   width: 50%;
 
   .tarea {
@@ -187,17 +206,15 @@ $font-second: #424458;
       justify-content: center;
       align-items: center;
       gap: 1rem;
-
-      i {
-        cursor: pointer;
-      }
       
       .fa-thumbs-up, .fa-thumbs-down {
         color: $font-second;
+        cursor: pointer;
       }
 
       .fa-times {
         color: $delete;
+        cursor: pointer;
       }
     }
   }

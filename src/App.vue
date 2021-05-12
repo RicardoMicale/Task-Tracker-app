@@ -20,9 +20,6 @@ export default {
     return {
       abrirLogin: false
     }
-  },
-  methods: {
-
   }
 }
 </script>
