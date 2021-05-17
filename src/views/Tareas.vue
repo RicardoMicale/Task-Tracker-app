@@ -21,16 +21,8 @@
         </form>
       </div>
       <div class="tareas">
-        <div class="tarea" :class="tarea.completada ? 'listo' : ''"  v-for="tarea in cUser" :key="tarea.id">
-          <div class="info">
-            <h5>{{ tarea.descripcion }}</h5>
-            <p>{{ tarea.fecha }}</p>
-          </div>
-          <div class="actions">
-            <i class="fas fa-thumbs-down" v-if="tarea.completada"></i>
-            <i class="fas fa-thumbs-up" v-else></i>
-            <i class="fas fa-times" @click="eliminarTarea(tarea.id)"></i>
-          </div>
+        <div class="contenedor-tareas" v-for="(tarea, index) in cUser" :key="tarea.id">
+          <Tarea :tarea="tarea" :index="index" />
         </div>
       </div>
     </div>
@@ -40,9 +32,13 @@
 <script>
 import firebase from 'firebase';
 import * as fb from '../firebase';
+import Tarea from '../components/Tarea';
 
 export default {
     name: 'Tareas',
+    components: {
+      Tarea
+    },
     data() {
       return {
         fecha: '',
@@ -82,7 +78,14 @@ export default {
 
       },
       constructorTareas(fecha, descrip) {
-        let id = this.cUser.length;
+        let id; 
+
+        if(this.cUser.length > 0) {
+          const lastId = this.cUser[this.cUser.length - 1]
+          id = lastId.id + 1;
+        } else {
+          id = 0;
+        }
         
         const tarea = {
           fecha: fecha,
@@ -93,26 +96,6 @@ export default {
 
         return tarea
       },
-      eliminarTarea(id) {
-
-        const user = firebase.auth().currentUser;
-        let usuario;
-
-        fb.getUser(user.uid).then(response => {
-
-          const tareasUser = response.data().tareas;
-          usuario = response.data()
-
-          tareasUser.splice(id, 1);
-
-          usuario.tareas = tareasUser;
-        })
-
-        console.log(usuario);
-
-        fb.updateUser(user.uid, usuario);
-
-      }
     },
     mounted() {
       this.cargarTareas()
@@ -171,57 +154,15 @@ $font-second: #424458;
 }
 
 .tareas {
+  width: 50%;
+}
+
+.contenedor-tareas {
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-end;
-  width: 50%;
-
-  .tarea {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 90%;
-    height: 4rem;
-    margin: .6rem 0;
-    background-color: white;
-    border-radius: 5px;
-    padding: 0 2rem;
-    box-shadow: -4px 4px 4px rgba(18, 25, 84, 0.25);
-
-    h5, p {
-      color: $primary;
-    }
-
-    h5 {
-      font-size: 1rem;
-    }
-
-    p {
-      font-size: .8rem;
-    }
-
-    .actions {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 1rem;
-      
-      .fa-thumbs-up, .fa-thumbs-down {
-        color: $font-second;
-        cursor: pointer;
-      }
-
-      .fa-times {
-        color: $delete;
-        cursor: pointer;
-      }
-    }
-  }
-}
-
-.listo {
-  border-left: solid 6px $add;
 }
 
 .agregar {
