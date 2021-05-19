@@ -121,4 +121,10 @@ $font-second: #424458;
   border-left: solid 6px $add;
 }
 
+@media screen and (max-width: 1024px) {
+  .tarea {
+    width: 100%;
+  }
+}
+
 </style>

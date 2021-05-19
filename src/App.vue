@@ -30,7 +30,7 @@ export default {
       if(user) {
         await fb.getUser(user.uid).then(response => {
           this.usuario = response.data();
-        }).catch(err => console.log(err));
+        });
 
         this.abrirLogin = false;
       }
@@ -64,7 +64,7 @@ $font: 'Poppins', Helvetica;
 
 .main {
   background-color: $bg;
-  height: 100vh;
+  height: 100%;
 }
 
 .login {

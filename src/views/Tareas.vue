@@ -2,11 +2,13 @@
   <div class="vista-tareas">
     <h3>Gestion de tareas</h3>
     <div class="acciones">
-      <button @click="abrirForm()">Agregar Tarea</button>
-      <h5>Lista de tareas</h5>
+      <button @click="abrirForm()" class="btn">Agregar Tarea</button>
+      <h5 class="label">Lista de tareas</h5>
     </div>
     <div class="informacion">
-      
+      <div class="cta">
+        <button @click="abrirForm()" class="btn btn-tlf">Agregar Tarea</button>
+      </div>
       <div class="contenedor-agregar">
         <div class="agregar" v-if="agregar">
           <form @submit.prevent="agregarTarea()">
@@ -21,6 +23,9 @@
             <input type="submit" value="Guardar">
           </form>
         </div>
+      </div>
+      <div class="cta">
+        <h5 class="label label-tlf">Lista de tareas</h5>
       </div>
       <div class="tareas">
         <div class="contenedor-tareas" v-for="(tarea, index) in cUser" :key="tarea.id">
@@ -71,6 +76,8 @@ export default {
 
         fb.updateUser(user.uid, usuarioActual);
 
+        this.fecha = '';
+        this.descrip = '';
 
       },
       constructorTareas(fecha, descrip) {
@@ -105,7 +112,7 @@ export default {
         } else {
           this.cargarTareas(user)
         }
-      }).catch(err => console.log(err));
+      });
 
     }
 }
@@ -121,8 +128,12 @@ $add: #05A415;
 $delete: #AD0000;
 $font-second: #424458;
 
+.cta {
+  display: none;
+}
+
 .vista-tareas {
-  padding: 0 7vw;
+  padding: 0 7vw 5vh;
 
   h3 {
     font-size: 2rem;
@@ -137,23 +148,32 @@ $font-second: #424458;
   align-items: center;
 }
 
+@media screen and (max-width: 1024px) {
+  .acciones, .informacion {
+    display: flex;
+    flex-direction: column;
+  }
+
+}
+
+.btn {
+  border-radius: 50000px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  color: white;
+  background-color: $primary;
+  padding: .6rem 1rem;
+}
+
+.label {
+  color: $font-second;
+  font-size: 1.3rem;
+}
+
 .acciones {
   margin-bottom: 2rem;
-
-  h5 {
-    color: $font-second;
-    font-size: 1.3rem;
-  }
-
-  button {
-    border-radius: 50000px;
-    outline: none;
-    border: none;
-    cursor: pointer;
-    color: white;
-    background-color: $primary;
-    padding: .6rem 1rem;
-  }
+  
 }
 
 .informacion {
@@ -175,6 +195,12 @@ $font-second: #424458;
 
 .contenedor-agregar {
   width: 50%;
+}
+
+@media screen and (max-width: 1024px) {
+  .contenedor-agregar, .tareas {
+    width: 100%;
+  }
 }
 
 .agregar {
@@ -229,6 +255,24 @@ $font-second: #424458;
     color: rgba($color: #000000, $alpha: .6);
   }
 
+}
+
+@media screen and (max-width:1024px) {
+  .cta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 3rem 0 1rem;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  .acciones {
+    display: none;
+  }
 }
 
 </style>
