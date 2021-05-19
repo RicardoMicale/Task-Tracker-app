@@ -62,9 +62,8 @@ $font: 'Poppins', Helvetica;
   font-family: $font;
 }
 
-.main {
+body {
   background-color: $bg;
-  height: 100%;
 }
 
 .login {
