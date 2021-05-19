@@ -5,8 +5,8 @@
             <p>{{ tarea.fecha }}</p>
         </div>
         <div class="actions">
-            <div v-if="tarea.completada"><i class="fas fa-thumbs-down"></i></div>
-            <div v-else><i class="fas fa-thumbs-up"></i></div>
+            <div v-if="tarea.completada" @click="completado()"><i class="fas fa-thumbs-down"></i></div>
+            <div v-else @click="completado()"><i class="fas fa-thumbs-up"></i></div>
             <div @click="eliminarTarea(tarea.id)"><i class="fas fa-times"></i></div>
         </div>
     </div>
@@ -28,22 +28,38 @@ export default {
 
         const user = firebase.auth().currentUser;
         let usuario;
-        console.log(this.index)
 
         await fb.getUser(user.uid).then(response => {
 
           const tareasUser = response.data().tareas;
-          usuario = response.data()
+          usuario = response.data();
 
           tareasUser.splice(this.index, 1);
 
           usuario.tareas = tareasUser;
-        });
-
-        console.log(usuario);
+        }).catch(err => console.log(err));
 
         fb.updateUser(user.uid, usuario);
+      },
+      async completado() {
+        const user = firebase.auth().currentUser;
+        let usuario;
 
+        await fb.getUser(user.uid).then(response => {
+          
+          let tareasUser = response.data().tareas;
+          usuario = response.data();
+
+          let tareaActual = tareasUser[this.index];
+          tareaActual.completada = !tareaActual.completada;
+          
+          tareasUser[this.index] = tareaActual;
+
+          usuario.tareas = tareasUser;
+          
+        }).catch(err => console.log(err));
+
+        fb.updateUser(user.uid, usuario);
       }
     }
 }

@@ -9,6 +9,8 @@
 <script>
 import Navbar from './components/Navbar';
 import Login from './components/Login';
+import firebase from 'firebase';
+import * as fb from './firebase';
 
 export default {
   name: 'App',
@@ -18,8 +20,21 @@ export default {
   },
   data() {
     return {
-      abrirLogin: false
+      abrirLogin: false,
+      usuario: {}
     }
+  },
+  created() {
+
+    firebase.auth().onAuthStateChanged(async user => {
+      if(user) {
+        await fb.getUser(user.uid).then(response => {
+          this.usuario = response.data();
+        }).catch(err => console.log(err));
+
+        this.abrirLogin = false;
+      }
+    })
   }
 }
 </script>

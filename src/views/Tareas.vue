@@ -2,23 +2,25 @@
   <div class="vista-tareas">
     <h3>Gestion de tareas</h3>
     <div class="acciones">
-      <button>Agregar Tarea</button>
+      <button @click="abrirForm()">Agregar Tarea</button>
       <h5>Lista de tareas</h5>
     </div>
     <div class="informacion">
       
-      <div class="agregar">
-        <form @submit.prevent="agregarTarea()">
-          <div>
-            <label for="descrip">Descripcion de la tarea</label>
-            <input type="text" v-model="descrip">
-          </div>
-          <div>
-            <label for="date">Fecha y/o hora de la tarea</label>
-            <input type="text" v-model="fecha">
-          </div>
-          <input type="submit" value="Guardar">
-        </form>
+      <div class="contenedor-agregar">
+        <div class="agregar" v-if="agregar">
+          <form @submit.prevent="agregarTarea()">
+            <div>
+              <label for="descrip">Descripcion de la tarea</label>
+              <input type="text" v-model="descrip">
+            </div>
+            <div>
+              <label for="date">Fecha y/o hora de la tarea</label>
+              <input type="text" v-model="fecha">
+            </div>
+            <input type="submit" value="Guardar">
+          </form>
+        </div>
       </div>
       <div class="tareas">
         <div class="contenedor-tareas" v-for="(tarea, index) in cUser" :key="tarea.id">
@@ -43,18 +45,12 @@ export default {
       return {
         fecha: '',
         descrip: '',
-        cUser: []
+        cUser: [],
+        agregar: true
       }
     },
     methods: {
-      cargarTareas() {
-        const user = firebase.auth().currentUser
-        
-        if(!user) {
-          alert('No has iniciado sesion, por favor ingresa a tu cuenta para poder agregar tareas');
-          this.$router.push('/');
-          return
-        }
+      cargarTareas(user) {
 
         fb.getUser(user.uid).then(response => {
           this.cUser = response.data().tareas;
@@ -96,9 +92,21 @@ export default {
 
         return tarea
       },
+      abrirForm() {
+        this.agregar = !this.agregar;
+      }
     },
-    mounted() {
-      this.cargarTareas()
+    created() {
+      
+      firebase.auth().onAuthStateChanged(user => {
+        if(!user) {
+          this.$router.push('/');
+          alert('No has iniciado sesion, por favor ingresa a tu cuenta para poder agregar tareas');
+        } else {
+          this.cargarTareas(user)
+        }
+      }).catch(err => console.log(err));
+
     }
 }
 </script>
@@ -165,8 +173,12 @@ $font-second: #424458;
   align-items: flex-end;
 }
 
-.agregar {
+.contenedor-agregar {
   width: 50%;
+}
+
+.agregar {
+  width: 100%;
   height: 15rem;
   background-color: white;
   border-radius: 5px;
