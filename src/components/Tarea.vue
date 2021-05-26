@@ -5,8 +5,9 @@
             <p>{{ tarea.fecha }}</p>
         </div>
         <div class="actions">
-            <div v-if="tarea.completada" @click="completado()"><i class="fas fa-thumbs-down"></i></div>
-            <div v-else @click="completado()"><i class="fas fa-thumbs-up"></i></div>
+            <div @click="completado()">
+              <i class="fas fa-check" :class="tarea.completada ? 'completada' : ''"></i>
+            </div>
             <div @click="eliminarTarea(tarea.id)"><i class="fas fa-times"></i></div>
         </div>
     </div>
@@ -106,7 +107,7 @@ $font-second: #424458;
       align-items: center;
       gap: 1rem;
       
-      .fa-thumbs-up, .fa-thumbs-down {
+      .fa-check {
         color: $font-second;
         cursor: pointer;
       }
@@ -114,6 +115,10 @@ $font-second: #424458;
       .fa-times {
         color: $delete;
         cursor: pointer;
+      }
+
+      .completada {
+        color: $add;
       }
     }
 }
