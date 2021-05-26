@@ -86,6 +86,7 @@ $font-second: #424458;
     border-radius: 5px;
     padding: 0 2rem;
     box-shadow: -4px 4px 4px rgba(18, 25, 84, 0.25);
+    cursor: pointer;
 
     h5, p {
       color: $primary;
