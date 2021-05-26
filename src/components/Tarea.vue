@@ -5,8 +5,8 @@
             <p>{{ tarea.fecha }}</p>
         </div>
         <div class="actions">
-            <div @click="completado()">
-              <i class="fas fa-check" :class="tarea.completada ? 'completada' : ''"></i>
+            <div @click="completado()" :class="completa ? 'completada' : ''">
+              <i class="fas fa-check"></i>
             </div>
             <div @click="eliminarTarea(tarea.id)"><i class="fas fa-times"></i></div>
         </div>
@@ -22,6 +22,11 @@ export default {
     props: {
         tarea: Object,
         index: Number
+    },
+    data() {
+      return {
+        completa: Boolean
+      }
     },
     methods: {
         
@@ -45,6 +50,7 @@ export default {
       async completado() {
         const user = firebase.auth().currentUser;
         let usuario;
+        this.completa = !this.completa;
 
         await fb.getUser(user.uid).then(response => {
           
@@ -62,6 +68,9 @@ export default {
 
         fb.updateUser(user.uid, usuario);
       }
+    },
+    created() {
+      this.completa = this.tarea.completada;
     }
 }
 </script>
@@ -117,9 +126,10 @@ $font-second: #424458;
         cursor: pointer;
       }
 
-      .completada {
+      .completada .fa-check {
         color: $add;
       }
+
     }
 }
 
