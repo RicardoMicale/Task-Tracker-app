@@ -2,12 +2,12 @@
   <div class="vista-tareas">
     <h3>Gestion de tareas</h3>
     <div class="acciones">
-      <button @click="abrirForm()" class="btn">Agregar Tarea</button>
+      <button @click="abrirForm()" class="btn">{{ agregar ? 'Cerrar' : 'Abrir' }} formulario</button>
       <h5 class="label">Lista de tareas</h5>
     </div>
     <div class="informacion">
       <div class="cta">
-        <button @click="abrirForm()" class="btn btn-tlf">Agregar Tarea</button>
+        <button @click="abrirForm()" class="btn btn-tlf">{{ agregar ? 'Cerrar' : 'Abrir' }} formulario</button>
       </div>
       <div class="contenedor-agregar">
         <div class="agregar" v-if="agregar">
@@ -20,7 +20,7 @@
               <label for="date">Fecha y/o hora de la tarea</label>
               <input type="text" v-model="fecha">
             </div>
-            <input type="submit" value="Guardar">
+            <input type="submit" value="Agregar">
           </form>
         </div>
       </div>
@@ -57,9 +57,11 @@ export default {
     methods: {
       cargarTareas(user) {
 
-        fb.getUser(user.uid).then(response => {
-          this.cUser = response.data().tareas;
-        }).catch(err => {console.log(err)});
+        fb.getTareas(user.uid).onSnapshot({
+          includeMetadataChanges: true
+        }, snap => {
+          this.cUser = snap.data().tareas;
+        });
 
       },
       async agregarTarea() {

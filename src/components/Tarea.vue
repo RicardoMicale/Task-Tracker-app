@@ -1,5 +1,5 @@
 <template>
-    <div class="tarea" :class="tarea.completada ? 'listo' : ''">
+    <div class="tarea" :class="tarea.completada ? 'listo' : ''" @dblclick="completado()">
         <div class="info">
             <h5>{{ tarea.descripcion }}</h5>
             <p>{{ tarea.fecha }}</p>
