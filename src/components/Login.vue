@@ -32,7 +32,7 @@ export default {
                         })
                         .catch(err => console.log(err));
 
-                    if(userExists) {
+                    if(!userExists) {
                         const usuario = {
                             tareas: [],
                             nombre: response.user.displayName
